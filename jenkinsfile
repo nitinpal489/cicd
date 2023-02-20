@@ -1,0 +1,17 @@
+pipeline {
+    agent any
+       
+    stages {
+        stage('docker build') {
+            steps {
+                sh '''
+                sudo docker build -t newimage:1 .
+                #login to ECR
+                aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 767243193153.dkr.ecr.ap-south-1.amazonaws.com
+                # push to ecr
+                docker push 767243193153.dkr.ecr.ap-south-1.amazonaws.com/dehradun:latest
+            '''
+            }
+        }
+    }
+}
